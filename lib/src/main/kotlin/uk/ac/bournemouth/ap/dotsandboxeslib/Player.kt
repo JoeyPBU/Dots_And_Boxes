@@ -14,6 +14,7 @@ sealed interface Player
  */
 interface HumanPlayer : Player
 
+
 /**
  * Base class for computer players. This class adds the [makeMove] function that allows the player
  * to make a move for the given game.

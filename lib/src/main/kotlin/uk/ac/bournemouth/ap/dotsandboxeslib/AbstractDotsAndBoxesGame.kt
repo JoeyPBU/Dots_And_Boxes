@@ -4,6 +4,7 @@ import uk.ac.bournemouth.ap.dotsandboxeslib.DotsAndBoxesGame.Box
 import uk.ac.bournemouth.ap.dotsandboxeslib.DotsAndBoxesGame.Line
 import uk.ac.bournemouth.ap.lib.matrix.ext.Coordinate
 
+
 /**
  * Simple base class for the Dots and Boxes game that provides some implementation for the core
  * requirements of the game. It is there merely for convenience and does not need to be used.
