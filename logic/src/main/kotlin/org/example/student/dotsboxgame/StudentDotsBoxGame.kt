@@ -5,8 +5,6 @@ import uk.ac.bournemouth.ap.dotsandboxeslib.*
 import uk.ac.bournemouth.ap.lib.matrix.Matrix
 import uk.ac.bournemouth.ap.lib.matrix.SparseMatrix
 import uk.ac.bournemouth.ap.lib.matrix.ext.Coordinate
-
-
 import uk.ac.bournemouth.ap.lib.matrix.impl.ImmutableSparseMatrixCompanion
 import kotlin.random.Random
 
@@ -16,16 +14,14 @@ class StudentDotsBoxGame(columns: Int, rows: Int, players: List<Player>) : Abstr
     override val players: List<Player> = players.toList()
     private var currentPlayerSwitch = 0
     override val currentPlayer: Player get()= players[currentPlayerSwitch]
+
     override val boxes: Matrix<StudentBox> = Matrix(columns, rows, ::StudentBox)
-
-
     override val lines: SparseMatrix<StudentLine> = SparseMatrix(
         maxWidth = columns + 1,
         maxHeight = rows * 2 + 1,
         validator = {x, y -> y%2==1 || x<columns},
         init = {x, y -> StudentLine(x,y)}
     )
-
 
     override var isFinished: Boolean = false
         get() = field
