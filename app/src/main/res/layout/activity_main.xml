@@ -6,23 +6,12 @@
         android:layout_height="match_parent"
         tools:context=".MainActivity">
 
-
-    <view
-        android:id="@+id/GameBoard"
-        class="uk.ac.bournemouth.ap.dotsandboxes.views.GameBoard"
-        android:layout_width="306dp"
-        android:layout_height="502dp"
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="134dp"
+        android:layout_height="157dp"
+        android:text="Hello World"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <view
-        android:id="@+id/DisplayBoard"
-        class="uk.ac.bournemouth.ap.dotsandboxes.views.DisplayBoard"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/GameBoard"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

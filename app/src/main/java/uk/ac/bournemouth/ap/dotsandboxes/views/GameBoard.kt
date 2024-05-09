@@ -6,6 +6,9 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
+import org.example.student.dotsboxgame.StudentDotsBoxGame
+import uk.ac.bournemouth.ap.lib.matrix.Matrix
+import uk.ac.bournemouth.ap.lib.matrix.SparseMatrix
 
 
 class GameBoard @JvmOverloads constructor(
@@ -16,55 +19,51 @@ class GameBoard @JvmOverloads constructor(
 
     private val linePaint = Paint().apply {
         color = Color.BLACK
-        strokeWidth = 5f
+        strokeWidth = 10f
     }
+
+    var boardOffset: Float = 10f
+    lateinit var game: StudentDotsBoxGame
 
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        canvas.drawLine(0f, 0f, width.toFloat(), height.toFloat(), linePaint)
-
-        drawStartCard(canvas)
         drawBoard(canvas)
-        drawEndCard(canvas)
-
     }
 
 
-    fun drawStartCard(canvas: Canvas){
-        // Draw a box in the middle of the screen with two Buttons
-        // Two Player and Versus Bot
-        // Start Button once mode selected
-    }
-
-
-    fun drawBoard(canvas: Canvas){
-        drawBoardDisplay(canvas)
+    fun drawBoard(canvas: Canvas) {
         drawGrid(canvas)
         drawBoxes(canvas, 5F)
     }
 
+    fun drawGrid(canvas: Canvas) {
+        val columns = game.lines.maxWidth - 1
+        val rows = (game.lines.maxHeight - 1) / 2
 
-    fun drawBoardDisplay(canvas: Canvas){
-        // Draw a four textBoxes in a grid
-        // Two for the Players
-        // Two for their respective Scores
+        val boxWidth = (width - 2 * boardOffset) / columns
+        val boxHeight = (height - 2 * boardOffset) / rows
+
+        for (x in 0 until columns + 1) {
+            val startX = boardOffset + x * boxWidth
+            val startY = boardOffset
+            val endX = startX
+            val endY = boardOffset + rows * boxHeight
+            canvas.drawLine(startX, startY, endX, endY, linePaint)
+        }
+
+        for (y in 0 until rows + 1){
+            val startX = boardOffset
+            val startY = boardOffset + y * boxHeight
+            val endX = boardOffset + columns * boxWidth
+            val endY = startY
+            canvas.drawLine(startX, startY, endX, endY, linePaint)
+        }
+
     }
 
+    fun drawBoxes(canvas: Canvas, gridSize: Float) {
 
-    fun drawGrid(canvas: Canvas){
-
-    }
-
-
-    fun drawBoxes(canvas: Canvas, gridSize: Float){
-
-    }
-
-
-    fun drawEndCard(canvas: Canvas){
-        // Draw a box in the middle of the screen with a textBox and Button
-        // The textBox will display the total scores of the Players, highlighting the Winner
-        // The Button will restart the View
     }
 }
+
