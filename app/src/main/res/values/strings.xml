@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">Dots and boxes</string>
     <string name="hello_world">Hello World</string>
+    <string name="textview">TextView</string>
+    <string name="p1S" />
+    <string name="p1">p1</string>
+    <string name="p2">p2</string>
+    <string name="p2s">p2s</string>
 </resources>

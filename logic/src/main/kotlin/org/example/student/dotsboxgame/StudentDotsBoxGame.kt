@@ -7,7 +7,7 @@ import uk.ac.bournemouth.ap.lib.matrix.SparseMatrix
 import uk.ac.bournemouth.ap.lib.matrix.ext.Coordinate
 
 
-class StudentDotsBoxGame(columns: Int, rows: Int, players: List<Player>) : AbstractDotsAndBoxesGame() {
+class StudentDotsBoxGame(val columns: Int, val rows: Int, players: List<Player>) : AbstractDotsAndBoxesGame() {
 
     override val players: List<Player> = players.toList()
     private var currentPlayerSwitch = 0
@@ -20,6 +20,7 @@ class StudentDotsBoxGame(columns: Int, rows: Int, players: List<Player>) : Abstr
         validator = {x, y -> y % 2 == 1 || x < columns},
         init = {x, y -> StudentLine(x, y)}
     )
+
 
     override var isFinished: Boolean = false
 
