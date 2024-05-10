@@ -1,5 +1,8 @@
 package uk.ac.bournemouth.ap.dotsandboxeslib
 
+
+
+
 /**
  * This is a sealed base class for players. It has two direct subtypes: [HumanPlayer] and
  * [ComputerPlayer]. This sealed type (which does not allow other direct subtypes) ensures that
@@ -32,6 +35,8 @@ interface ComputerPlayer : Player {
      *
      * @param game The game to make a move on.
      */
-    fun makeMove(game: DotsAndBoxesGame)
+    fun makeMove(game: DotsAndBoxesGame){
+
+    }
 
 }

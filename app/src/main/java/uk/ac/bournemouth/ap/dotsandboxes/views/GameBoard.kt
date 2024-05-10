@@ -5,31 +5,15 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
-import android.graphics.Rect
 import android.util.AttributeSet
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
-import androidx.constraintlayout.widget.ConstraintSet.Motion
 import androidx.core.view.GestureDetectorCompat
 import org.example.student.dotsboxgame.SimpleHumanPlayer
 import org.example.student.dotsboxgame.SimpleRobotPlayer
 import org.example.student.dotsboxgame.StudentDotsBoxGame
-import uk.ac.bournemouth.ap.dotsandboxeslib.Player
-import uk.ac.bournemouth.ap.lib.matrix.Matrix
-import uk.ac.bournemouth.ap.lib.matrix.SparseMatrix
-import uk.ac.bournemouth.ap.dotsandboxeslib.AbstractDotsAndBoxesGame.AbstractBox
-import uk.ac.bournemouth.ap.dotsandboxeslib.AbstractDotsAndBoxesGame.AbstractLine
-import uk.ac.bournemouth.ap.dotsandboxeslib.ComputerPlayer
-import uk.ac.bournemouth.ap.dotsandboxeslib.DotsAndBoxesGame
-import uk.ac.bournemouth.ap.dotsandboxeslib.DotsAndBoxesGame.Box
-import uk.ac.bournemouth.ap.dotsandboxeslib.DotsAndBoxesGame.Line
-import uk.ac.bournemouth.ap.dotsandboxeslib.HumanPlayer
-import uk.ac.bournemouth.ap.lib.matrix.ext.Coordinate
-import kotlin.math.abs
-import kotlin.math.pow
-import kotlin.math.sqrt
-import kotlin.random.Random
+
 
 class GameBoard @JvmOverloads constructor(
     context: Context,
@@ -59,12 +43,45 @@ class GameBoard @JvmOverloads constructor(
     private val columns get() = game.columns
     private val rows get() = game.rows
 
+    private var displayBoard: DisplayBoard? = null
+
+    fun setDisplayBoard(displayBoard: DisplayBoard) {
+        this.displayBoard = displayBoard
+    }
+
+    fun setEndCard(endCard: EndCard){
+        this.endCard = endCard
+    }
+
+    private fun updateDisplayBoard(game: StudentDotsBoxGame?) {
+        displayBoard?.game = game
+        displayBoard?.invalidate()
+    }
+
+    private var endCard: EndCard? = null
+
+
+    private fun displayEndCard(game: StudentDotsBoxGame) {
+        endCard?.game = game
+        visibility = GONE
+        endCard?.visibility = VISIBLE
+    }
+
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         drawBoxes(canvas)
         drawGrid(canvas)
 
+        if ((0 until columns - 1).all { x ->
+                (0 until rows - 1).all { y ->
+                    game.boxes[x, y].owningPlayer != null
+                }
+            })  {
+            displayEndCard(game)
+            return
+        }
+        updateDisplayBoard(game)
     }
 
 
@@ -107,23 +124,33 @@ class GameBoard @JvmOverloads constructor(
         val startXOffset = width / 12
         val startYOffset = height / 12
 
-        for (box in game.boxes) {
-            if (box.owningPlayer != null) {
-                val startX = startXOffset + box.boxX * (boxWidth + boardOffset)
-                val startY = startYOffset + box.boxY.coerceAtMost(rows - 1) * (boxHeight + boardOffset)
+        for (x in 0 until columns - 1) {
+            for (y in 0 until rows - 1) {
+                val box = game.boxes[x, y]
+                if (box.owningPlayer != null) {
+                    val startX = startXOffset + box.boxX * (boxWidth + boardOffset)
+                    val startY = startYOffset + box.boxY * (boxHeight + boardOffset)
 
-                val boxFill = Paint().apply {
-                    color = when (box.owningPlayer) {
-                        is SimpleRobotPlayer -> Color.CYAN
-                        is SimpleHumanPlayer -> Color.GREEN
-                        else -> Color.TRANSPARENT
+                    val adjustedStartX = startX.coerceAtMost(width - boxWidth)
+                    val adjustedStartY = startY.coerceAtMost(height - boxHeight)
+
+                    val boxFill = Paint().apply {
+                        color = when (box.owningPlayer) {
+                            is SimpleRobotPlayer -> Color.CYAN
+                            is SimpleHumanPlayer -> Color.GREEN
+                            else -> Color.TRANSPARENT
+                        }
+                        style = Paint.Style.FILL
                     }
-                    style = Paint.Style.FILL
+                    canvas.drawRect(
+                        adjustedStartX, adjustedStartY,
+                        adjustedStartX + boxWidth + 5, adjustedStartY + boxHeight + 5, boxFill
+                    )
                 }
-                canvas.drawRect(startX, startY, startX + boxWidth + 5, startY + boxHeight + 5, boxFill)
             }
         }
     }
+
 
     private val gestureDetector = GestureDetectorCompat(context, object:
         GestureDetector.SimpleOnGestureListener() {

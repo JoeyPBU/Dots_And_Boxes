@@ -34,6 +34,21 @@ class StudentDotsBoxGame(val columns: Int, val rows: Int, players: List<Player>)
     }
 
 
+    fun countBoxes(): List<Int> {
+        var playerScore = 0
+        var robotScore = 0
+        for(box in boxes){
+            if (box.owningPlayer == players[0]) {
+                playerScore++
+            }
+            if (box.owningPlayer == players[1]){
+                robotScore++
+            }
+        }
+        return listOf(playerScore, robotScore)
+    }
+
+
     inner class StudentLine(lineX: Int, lineY: Int) : AbstractLine(lineX, lineY) {
         override var isDrawn: Boolean = false
 
@@ -72,7 +87,11 @@ class StudentDotsBoxGame(val columns: Int, val rows: Int, players: List<Player>)
             }
 
             else {
-                if(boxes.none(){it.owningPlayer == null}){
+                if ((0 until columns).all { x ->
+                        (0 until rows).all { y ->
+                            boxes[x, y].owningPlayer != null
+                        }
+                    }) {
                     isFinished = true
                     fireGameChange()
                     val scores = getScores().mapIndexed(){i, score -> players[i] to score}
